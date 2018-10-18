@@ -14,9 +14,12 @@ Al subir la aplicacion crea cada una de las tablas utilizadas, Inmueble, Negocio
 ## Pasos para correr la aplicacion
 
 ### Descargar las imagenes
-Para el back-end
+#### Imagen back-end
+
 docker pull lmorenoo/inmueble
-Para la base de datos
+
+#### Imagen base de datos
+
 docker pull lmorenoo/mysql
 
 ### subir el docker-compose
