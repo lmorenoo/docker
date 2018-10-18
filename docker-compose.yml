@@ -1,0 +1,43 @@
+version: "3"
+
+services:
+  mysql:
+    image: mysql/mysql-server:5.6
+    command: mysqld --max-connections=1000 --max-allowed-packet=32M --innodb-log-file-size=256M --lower-case-table-names=1
+    ports:
+      - 3307:3306
+    environment:
+      - MYSQL_DATABASE=db_inmueble
+      - MYSQL_USER=user
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_PASSWORD=password
+    networks:
+      - network1
+    deploy:
+      replicas: 1
+    volumes:
+       - ./inmueble-mysql/data:/var/lib/mysql/data
+
+  inmueble:
+    container_name: inmueble
+    build:
+      context: .
+    image: inmueble:latest
+    depends_on:
+      - mysql
+    restart: on-failure
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/db_inmueble?useSSL=false 
+      - SPRING_DATASOURCE_USERNAME=user
+      - SPRING_DATASOURCE_PASSWORD=password
+    ports:
+      - "8081:8081"
+    networks:
+      - network1
+    deploy:
+      replicas: 1
+    links:
+     - mysql
+     
+networks:
+  network1:
